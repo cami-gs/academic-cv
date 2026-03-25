@@ -1,0 +1,155 @@
+@import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap');
+
+@page {
+  size: A4;
+  margin: 1.25cm 1.45cm 1.25cm 1.45cm;
+  @bottom-right {
+    content: counter(page);
+    font-family: 'EB Garamond', Garamond, serif;
+    font-size: 9pt;
+    color: #444;
+  }
+}
+
+:root {
+  --text-primary: #111111;
+  --text-secondary: #333333;
+  --line-color: #bdbdbd;
+}
+
+.front-page,
+.title-page,
+#header {
+  display: none !important;
+}
+
+.header-section-number {
+  display: none !important;
+}
+
+body {
+  font-family: 'EB Garamond', Garamond, serif;
+  font-size: 10pt;
+  line-height: 1.16;
+  color: var(--text-primary);
+  background-color: white;
+  margin: 0;
+  padding: 0;
+}
+
+h1 {
+  font-size: 17pt;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  border-bottom: 1.2px solid var(--text-primary);
+  margin-top: 0;
+  margin-bottom: 0.1em;
+  padding-bottom: 1px;
+}
+
+h2 {
+  font-size: 11pt;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  border-bottom: 0.7px solid var(--line-color);
+  margin-top: 0.65em;
+  margin-bottom: 0.22em;
+  padding-bottom: 1px;
+  color: var(--text-primary);
+}
+
+h3 {
+  font-size: 10.3pt;
+  font-weight: 600;
+  margin-top: 0.25em;
+  margin-bottom: 0.05em;
+}
+
+p {
+  margin-top: 0.08em;
+  margin-bottom: 0.18em;
+}
+
+.contact-info {
+  font-size: 9.5pt;
+  margin-bottom: 0.45em;
+  text-align: left;
+  line-height: 1.15;
+}
+
+.contact-info a {
+  color: var(--text-primary);
+  text-decoration: none;
+}
+
+.section-content {
+  margin-bottom: 0.3em;
+}
+
+.entry {
+  margin-bottom: 0.35em;
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+.entry-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 6px;
+  border-bottom: none;
+  padding-bottom: 0;
+  margin-bottom: 0;
+}
+
+.entry-title {
+  font-weight: 700;
+  font-size: 10.2pt;
+  flex: 1 1 auto;
+}
+
+.entry-dates {
+  font-style: italic;
+  font-size: 9.2pt;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  flex: 0 0 auto;
+}
+
+.entry-subtitle {
+  font-size: 9.5pt;
+  margin-bottom: 0;
+}
+
+.entry-details {
+  font-size: 9.3pt;
+  color: var(--text-secondary);
+  margin-bottom: 0.03em;
+}
+
+ul {
+  margin-top: 0.05em;
+  margin-bottom: 0.2em;
+  padding-left: 0.9em;
+}
+
+li {
+  margin-bottom: 0.03em;
+}
+
+.pub-list li,
+.skills-list li,
+.languages-list li {
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+.section.level2 {
+  margin-top: 0.08em;
+  margin-bottom: 0.08em;
+}
+
+.section.level3 {
+  margin-top: 0.04em;
+  margin-bottom: 0.04em;
+}

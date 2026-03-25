@@ -1,0 +1,145 @@
+---
+output:
+  pagedown::html_paged:
+    css: ["styles.css"]
+---
+
+```{r setup, include=FALSE}
+library(yaml)
+library(readr)
+
+`%||%` <- function(a, b) {
+  if (!is.null(a)) a else b
+}
+
+info <- yaml::read_yaml("data/info.yml")
+education <- readr::read_csv("data/education.csv", show_col_types = FALSE)
+research <- readr::read_csv("data/research_experience.csv", show_col_types = FALSE)
+teaching <- readr::read_csv("data/teaching_experience.csv", show_col_types = FALSE)
+collective <- readr::read_csv("data/collective_engagement.csv", show_col_types = FALSE)
+publications <- readr::read_csv("data/publications.csv", show_col_types = FALSE)
+languages <- readr::read_csv("data/languages.csv", show_col_types = FALSE)
+skills <- yaml::read_yaml("data/skills.yml")
+
+render_entries <- function(df, title_col = NULL) {
+  clean_val <- function(x) {
+    if (is.null(x) || is.na(x) || trimws(x) == "") "" else trimws(x)
+  }
+
+  for (i in seq_len(nrow(df))) {
+    title_value <- if (!is.null(title_col)) {
+      clean_val(df[[title_col]][i])
+    } else if ("role" %in% names(df)) {
+      clean_val(df$role[i])
+    } else if ("degree" %in% names(df)) {
+      clean_val(df$degree[i])
+    } else {
+      ""
+    }
+
+    institution <- if ("institution" %in% names(df)) clean_val(df$institution[i]) else ""
+    location <- if ("location" %in% names(df)) clean_val(df$location[i]) else ""
+    subtitle <- if ("subtitle" %in% names(df)) clean_val(df$subtitle[i]) else ""
+    details <- if ("details" %in% names(df)) clean_val(df$details[i]) else ""
+    dates <- if ("dates" %in% names(df)) clean_val(df$dates[i]) else ""
+
+    subtitle_parts <- c(institution, location)
+    subtitle_line <- paste(subtitle_parts[subtitle_parts != ""], collapse = ", ")
+
+    cat('<div class="entry">')
+    cat('<div class="entry-header">')
+    cat(sprintf('<div class="entry-title">%s</div>', title_value))
+    cat(sprintf('<div class="entry-dates">%s</div>', dates))
+    cat('</div>')
+
+    if (subtitle_line != "") {
+      cat(sprintf('<div class="entry-subtitle">%s</div>', subtitle_line))
+    }
+
+    if (subtitle != "") {
+      cat(sprintf('<div class="entry-details"><em>%s</em></div>', subtitle))
+    }
+
+    if (details != "") {
+      cat(sprintf('<div class="entry-details">%s</div>', details))
+    }
+
+    cat('</div>')
+  }
+}
+```
+
+# `r info$name`
+
+```{r contact, results='asis', echo=FALSE}
+cat('<div class="contact-info">')
+cat(info$location, '<br>')
+cat(sprintf('<a href="mailto:%s">%s</a><br>', info$emails[[1]], info$emails[[1]]))
+cat(sprintf('<a href="mailto:%s">%s</a><br>', info$emails[[2]], info$emails[[2]]))
+cat(sprintf('<a href="%s">LinkedIn</a> | ', info$links$LinkedIn))
+cat(sprintf('<a href="%s">GitHub</a> | ', info$links$GitHub))
+cat(sprintf('<a href="%s">ORCID</a>', info$links$ORCID))
+cat('</div>')
+```
+
+## Academic Orientation
+
+`r info$academic_orientation`
+
+## Research Interests
+
+`r paste(info$research_interests, collapse = "; ")`
+
+## Education
+
+```{r education_section, results='asis', echo=FALSE}
+render_entries(education, title_col = "degree")
+```
+
+## Research Experience
+
+```{r research_section, results='asis', echo=FALSE}
+render_entries(research, title_col = "role")
+```
+
+## Teaching Experience
+
+```{r teaching_section, results='asis', echo=FALSE}
+render_entries(teaching, title_col = "role")
+```
+
+## Collective Engagement and Community-Based Work
+
+```{r collective_section, results='asis', echo=FALSE}
+render_entries(collective, title_col = "role")
+```
+
+## Publications
+
+```{r publications_section, results='asis', echo=FALSE}
+cat('<ul class="pub-list">')
+for (i in seq_len(nrow(publications))) {
+  cat(sprintf('<li>%s</li>', publications$citation[i]))
+}
+cat('</ul>')
+```
+
+## Methods and Technical Skills
+
+**Qualitative and Mixed Methods:** `r skills$qualitative_and_mixed_methods`
+
+**Quantitative Methods and Data:** `r skills$quantitative_and_data`
+
+**Research Production:** `r skills$research_production`
+
+**Digital and Organizational Tools:** `r skills$digital_and_organizational_tools`
+
+## Languages
+
+```{r languages_section, results='asis', echo=FALSE}
+cat('<ul class="languages-list">')
+for (i in seq_len(nrow(languages))) {
+  cat(sprintf('<li><strong>%s:</strong> %s</li>', languages$language[i], languages$level[i]))
+}
+cat('</ul>')
+```
