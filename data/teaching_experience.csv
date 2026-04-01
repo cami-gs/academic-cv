@@ -1,4 +1,4 @@
-role,institution,location,dates,subtitle,details
-"Teaching Assistant","School of Social Work, Universidad de Chile","Santiago, Chile","March–July 2022","Núcleo I+D – Disciplinar III: Social Question and Inequalities | Lecturer: Lorena Pérez-Roa",""
-"Teaching Assistant","School of Sociology, Universidad de Chile","Santiago, Chile","March–July 2018; March–July 2017","History of Modern Society | Lecturers: Emmanuelle Barozet and Silvia Lamadrid",""
-"Teaching Assistant","School of Sociology, Universidad de Chile","Santiago, Chile","March–July 2017","Sociological Theory I | Lecturer: Manuel Canales",""
+order,position,institution,location,dates,project,principal_investigator,course_or_unit,lecturer,bullets
+1,"Teaching Assistant","Social Work Programme, Universidad de Chile","","First semester 2022","","","Social Question and Inequalities","Lorena Pérez-Roa",""
+2,"Teaching Assistant","School of Sociology, Universidad de Chile","","March–July 2018; March–July 2017","","","History of Modern Society","Emmanuelle Barozet and Silvia Lamadrid",""
+3,"Teaching Assistant","School of Sociology, Universidad de Chile","","March–July 2017","","","Sociological Theory I","Manuel Canales",""
