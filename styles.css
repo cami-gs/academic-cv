@@ -1,124 +1,118 @@
-@import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap');
-
+/* =========================
+   Page setup
+   ========================= */
 
 @page {
   size: A4;
-  margin: 1.25cm 1.45cm 1.25cm 1.45cm;
-
-  @bottom-right {
-    content: counter(page);
-    font-family: 'EB Garamond', Garamond, serif;
-    font-size: 9pt;
-    color: #444;
-  }
+  margin: 1.5cm 1.6cm 1.5cm 1.6cm;
 }
 
-
-:root {
-  --text-primary: #111111;
-  --text-secondary: #333333;
-  --line-color: #bdbdbd;
-}
-
-
-/* Hidden structural elements */
-
-.front-page,
-.title-page,
-#header {
-  display: none !important;
-}
-
-.header-section-number {
-  display: none !important;
-}
-
-
-/* Base document styles */
-
-body {
-  font-family: 'EB Garamond', Garamond, serif;
-  font-size: 10pt;
-  line-height: 1.16;
-  color: var(--text-primary);
-  background-color: white;
+html, body {
   margin: 0;
   padding: 0;
+  background: #ffffff;
 }
 
+/* =========================
+   Typography
+   ========================= */
 
-/* Headings */
-
-h1 {
-  font-size: 17pt;
-  font-weight: 600;
-  letter-spacing: 0.02em;
-  border-bottom: 1.2px solid var(--text-primary);
-  margin-top: 0;
-  margin-bottom: 0.1em;
-  padding-bottom: 1px;
+body {
+  font-family: "EB Garamond", "Garamond", "Cormorant Garamond", "Book Antiqua", "Palatino Linotype", serif;
+  font-size: 10.5pt;
+  line-height: 1.22;
+  color: #111111;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
-
-h2 {
-  font-size: 11pt;
-  font-weight: 600;
-  letter-spacing: 0.01em;
-  border-bottom: 0.7px solid var(--line-color);
-  margin-top: 0.65em;
-  margin-bottom: 0.22em;
-  padding-bottom: 1px;
-  color: var(--text-primary);
-}
-
-h3 {
-  font-size: 10.3pt;
-  font-weight: 600;
-  margin-top: 0.25em;
-  margin-bottom: 0.05em;
-}
-
-
-/* Paragraphs and general spacing */
 
 p {
-  margin-top: 0.08em;
-  margin-bottom: 0.18em;
+  margin: 0 0 0.16cm 0;
 }
 
-.section-content {
-  margin-bottom: 0.3em;
-}
-
-.section.level2 {
-  margin-top: 0.08em;
-  margin-bottom: 0.08em;
-}
-
-.section.level3 {
-  margin-top: 0.04em;
-  margin-bottom: 0.04em;
-}
-
-
-/* Contact block */
-
-.contact-info {
-  font-size: 9.5pt;
-  margin-bottom: 0.45em;
-  text-align: left;
-  line-height: 1.15;
-}
-
-.contact-info a {
-  color: var(--text-primary);
+a {
+  color: #111111;
   text-decoration: none;
 }
 
+a:hover,
+a:focus {
+  text-decoration: underline;
+}
 
-/* Entries */
+strong, b {
+  font-weight: 700;
+}
+
+em, i {
+  font-style: italic;
+}
+
+/* =========================
+   Main CV container
+   ========================= */
+
+.cv-page {
+  width: 100%;
+}
+
+/* =========================
+   Header / name block
+   ========================= */
+
+.name-block {
+  margin-bottom: 0.34cm;
+  padding-bottom: 0.16cm;
+  border-bottom: 0.5px solid #777777;
+}
+
+.cv-name {
+  font-size: 18pt;
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: 0.01em;
+  margin-bottom: 0.08cm;
+}
+
+.cv-contact {
+  font-size: 9.5pt;
+  line-height: 1.18;
+  color: #222222;
+}
+
+/* =========================
+   Section titles
+   ========================= */
+
+.section-title {
+  margin-top: 0.28cm;
+  margin-bottom: 0.11cm;
+  padding-top: 0.02cm;
+  font-size: 10.2pt;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: #111111;
+  border-top: 0.7px solid #999999;
+  page-break-after: avoid;
+  break-after: avoid;
+}
+
+/* =========================
+   Body text
+   ========================= */
+
+.body-text {
+  margin: 0 0 0.14cm 0;
+  text-align: justify;
+}
+
+/* =========================
+   Entries
+   ========================= */
 
 .entry {
-  margin-bottom: 0.35em;
+  margin-bottom: 0.18cm;
   page-break-inside: avoid;
   break-inside: avoid;
 }
@@ -126,54 +120,148 @@ p {
 .entry-header {
   display: flex;
   justify-content: space-between;
-  align-items: baseline;
-  gap: 6px;
-  border-bottom: none;
-  padding-bottom: 0;
-  margin-bottom: 0;
+  align-items: flex-start;
+  gap: 0.4cm;
+  margin-bottom: 0.02cm;
 }
 
 .entry-title {
-  font-weight: 700;
-  font-size: 10.2pt;
   flex: 1 1 auto;
+  font-size: 10.9pt;
+  font-weight: 700;
+  line-height: 1.14;
 }
 
-.entry-dates {
-  font-style: italic;
-  font-size: 9.2pt;
-  color: var(--text-secondary);
-  white-space: nowrap;
+.entry-date {
   flex: 0 0 auto;
+  min-width: 2.5cm;
+  text-align: right;
+  font-size: 9.6pt;
+  line-height: 1.14;
+  white-space: nowrap;
 }
 
 .entry-subtitle {
-  font-size: 9.5pt;
+  font-size: 10pt;
+  font-style: italic;
+  line-height: 1.16;
+  margin-bottom: 0.03cm;
+}
+
+.entry-project {
+  font-size: 9.8pt;
+  line-height: 1.18;
+  margin-bottom: 0.04cm;
+}
+
+.entry-meta {
+  font-size: 9.45pt;
+  line-height: 1.16;
+  color: #222222;
+  margin-bottom: 0.05cm;
+}
+
+.entry-detail {
+  font-size: 9.7pt;
+  line-height: 1.18;
+  margin-bottom: 0.03cm;
+}
+
+.label {
+  font-weight: 700;
+}
+
+/* =========================
+   Bullet lists
+   ========================= */
+
+.cv-bullets {
+  margin: 0.04cm 0 0.08cm 0.32cm;
+  padding: 0;
+}
+
+.cv-bullets li {
+  margin: 0 0 0.06cm 0;
+  padding-left: 0.04cm;
+  line-height: 1.18;
+}
+
+.cv-bullets li:last-child {
   margin-bottom: 0;
 }
 
-.entry-details {
-  font-size: 9.3pt;
-  color: var(--text-secondary);
-  margin-bottom: 0.03em;
+/* =========================
+   Publications
+   ========================= */
+
+.publication {
+  margin-bottom: 0.11cm;
+  line-height: 1.2;
+  hanging-punctuation: first;
 }
 
+/* =========================
+   Skills and languages
+   ========================= */
 
-/* Lists */
-
-ul {
-  margin-top: 0.05em;
-  margin-bottom: 0.2em;
-  padding-left: 0.9em;
+.skill-group {
+  margin-bottom: 0.08cm;
+  line-height: 1.2;
 }
 
-li {
-  margin-bottom: 0.03em;
+.skill-label {
+  font-weight: 700;
 }
 
-.pub-list li,
-.skills-list li,
-.languages-list li {
+.language-line {
+  margin-bottom: 0.05cm;
+  line-height: 1.18;
+}
+
+/* =========================
+   Fine control for page breaks
+   ========================= */
+
+.section-title,
+.entry-header,
+.entry-title,
+.entry-subtitle,
+.publication {
   page-break-inside: avoid;
   break-inside: avoid;
+}
+
+ul,
+li,
+p {
+  orphans: 2;
+  widows: 2;
+}
+
+/* =========================
+   Pagedown-specific helpers
+   ========================= */
+
+.pagedjs_page_content {
+  font-family: "EB Garamond", "Garamond", "Cormorant Garamond", "Book Antiqua", "Palatino Linotype", serif;
+}
+
+.pagedjs_pages {
+  background: #ffffff;
+}
+
+.pagedjs_first_page .section-title:first-of-type {
+  margin-top: 0.18cm;
+}
+
+/* =========================
+   Optional subtle emphasis
+   ========================= */
+
+.entry-project,
+.entry-meta,
+.entry-detail,
+.language-line,
+.skill-group {
+  color: #151515;
 }
