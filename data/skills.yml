@@ -1,7 +1,31 @@
-qualitative_and_mixed_methods: "Instrument design, in-depth interviews, focus groups, thematic guides, autonomous fieldwork, thematic analysis, triangulation, and Atlas.ti (advanced)."
+qualitative_mixed_methods:
+  - "Qualitative interviewing"
+  - "Focus groups"
+  - "Ethnographic follow-up"
+  - "Flexible interview guides"
+  - "Qualitative content analysis"
+  - "Coding"
+  - "Codebook development"
+  - "Methodological memos"
+  - "Audit-trail documentation"
+  - "Participatory methodological tools"
+  - "Visual contextual documentation"
 
-quantitative_and_data: "Structured surveys, descriptive analysis, indicator construction, data cleaning, R, Stata, SPSS, advanced Excel, and basic SQL."
+data_analysis:
+  - "Atlas.ti 25"
+  - "R (user level)"
+  - "Stata (user level)"
+  - "SPSS (user level)"
+  - "Excel (advanced)"
+  - "SQL (user level)"
 
-research_production: "Technical reports, literature reviews (WoS, Scopus, Google Scholar), co-writing of scientific articles, and visual and analytical research materials."
-
-digital_and_organizational_tools: "Trello, Slack, Teams, Drive, Zotero, Mendeley, and EndNote."
+research_digital_tools:
+  - "Git"
+  - "Visual Studio Code"
+  - "Trello"
+  - "Slack"
+  - "Teams"
+  - "Google Drive"
+  - "Zotero"
+  - "Mendeley"
+  - "EndNote"
