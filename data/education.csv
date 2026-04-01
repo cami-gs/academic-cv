@@ -1,4 +1,4 @@
-degree,institution,location,dates,details
-"Programming and Systems Analysis","AIEP","Online, Chile","2024–present","Expected completion: December 2026."
-"Sociologist","Universidad de Chile, Faculty of Social Sciences","Santiago, Chile","2023","Thesis: Untangling Social Reproduction in Times of Uncertainty: Economic Strategies for Sustaining the Lives of Women Heads of Working-Class Households."
-"Diploma in English C1 for Professional Purposes","Instituto Chileno Británico de Cultura","Chile","2022",""
+order,degree,institution,location,dates,notes,thesis,supervisor,distinction
+1,"Professional Title in Sociology (Título Profesional: Socióloga); Licentiate in Sociology (Grado: Licenciada en Sociología)","Universidad de Chile, Faculty of Social Sciences","Santiago, Chile","2023","","Untangling Social Reproduction in Periods of Uncertainty: Economic Strategies for Sustaining the Lives of Women Heads of Popular Households","Lorena Pérez Roa","Graduated with highest distinction in the professional title and distinction in the licentiate degree."
+2,"Programming and Systems Analysis","AIEP","Online, Chile","2024–present","Expected completion: December 2026.","","",""
+3,"Advanced Diploma in English for Professional Purposes","Instituto Chileno Británico de Cultura","Santiago, Chile","2022","Online modality, 250 hours.","","",""
