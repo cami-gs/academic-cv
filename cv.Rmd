@@ -1,145 +1,256 @@
 ---
+title: "Camila Gonzalez Silva CV"
 output:
   pagedown::html_paged:
     css: ["styles.css"]
+    self_contained: true
+params:
+  pdf_mode: true
 ---
 
 ```{r setup, include=FALSE}
 library(yaml)
 library(readr)
+library(dplyr)
+library(stringr)
+library(purrr)
+library(knitr)
+library(htmltools)
 
 `%||%` <- function(a, b) {
-  if (!is.null(a)) a else b
+  if (!is.null(a) && !is.na(a) && length(a) > 0 && a != "") a else b
 }
 
 info <- yaml::read_yaml("data/info.yml")
 education <- readr::read_csv("data/education.csv", show_col_types = FALSE)
 research <- readr::read_csv("data/research_experience.csv", show_col_types = FALSE)
 teaching <- readr::read_csv("data/teaching_experience.csv", show_col_types = FALSE)
-collective <- readr::read_csv("data/collective_engagement.csv", show_col_types = FALSE)
+community <- readr::read_csv("data/community_engagement.csv", show_col_types = FALSE)
 publications <- readr::read_csv("data/publications.csv", show_col_types = FALSE)
 languages <- readr::read_csv("data/languages.csv", show_col_types = FALSE)
 skills <- yaml::read_yaml("data/skills.yml")
 
-render_entries <- function(df, title_col = NULL) {
-  clean_val <- function(x) {
-    if (is.null(x) || is.na(x) || trimws(x) == "") "" else trimws(x)
-  }
+escape_html <- function(x) {
+  htmltools::htmlEscape(x)
+}
 
-  for (i in seq_len(nrow(df))) {
-    title_value <- if (!is.null(title_col)) {
-      clean_val(df[[title_col]][i])
-    } else if ("role" %in% names(df)) {
-      clean_val(df$role[i])
-    } else if ("degree" %in% names(df)) {
-      clean_val(df$degree[i])
-    } else {
-      ""
+render_header_links <- function(info) {
+  links <- c(
+    if (!is.null(info$links$linkedin) && info$links$linkedin != "") {
+      sprintf('<a href="%s">LinkedIn</a>', info$links$linkedin)
+    },
+    if (!is.null(info$links$github) && info$links$github != "") {
+      sprintf('<a href="%s">GitHub</a>', info$links$github)
+    },
+    if (!is.null(info$links$orcid) && info$links$orcid != "") {
+      sprintf('<a href="%s">ORCID</a>', info$links$orcid)
     }
+  )
+  paste(links, collapse = " | ")
+}
 
-    institution <- if ("institution" %in% names(df)) clean_val(df$institution[i]) else ""
-    location <- if ("location" %in% names(df)) clean_val(df$location[i]) else ""
-    subtitle <- if ("subtitle" %in% names(df)) clean_val(df$subtitle[i]) else ""
-    details <- if ("details" %in% names(df)) clean_val(df$details[i]) else ""
-    dates <- if ("dates" %in% names(df)) clean_val(df$dates[i]) else ""
+render_contact_line <- function(info) {
+  parts <- c(
+    info$location %||% "",
+    info$email_primary %||% "",
+    info$email_secondary %||% "",
+    render_header_links(info)
+  )
+  parts <- parts[parts != ""]
+  paste(parts, collapse = " | ")
+}
 
-    subtitle_parts <- c(institution, location)
-    subtitle_line <- paste(subtitle_parts[subtitle_parts != ""], collapse = ", ")
+render_section_title <- function(title) {
+  cat(sprintf('<div class="section-title">%s</div>\n', escape_html(title)))
+}
 
-    cat('<div class="entry">')
-    cat('<div class="entry-header">')
-    cat(sprintf('<div class="entry-title">%s</div>', title_value))
-    cat(sprintf('<div class="entry-dates">%s</div>', dates))
-    cat('</div>')
-
-    if (subtitle_line != "") {
-      cat(sprintf('<div class="entry-subtitle">%s</div>', subtitle_line))
-    }
-
-    if (subtitle != "") {
-      cat(sprintf('<div class="entry-details"><em>%s</em></div>', subtitle))
-    }
-
-    if (details != "") {
-      cat(sprintf('<div class="entry-details">%s</div>', details))
-    }
-
-    cat('</div>')
+render_paragraph <- function(text, class = "body-text") {
+  if (!is.null(text) && text != "") {
+    cat(sprintf('<p class="%s">%s</p>\n', class, escape_html(text)))
   }
 }
-```
 
-# `r info$name`
-
-```{r contact, results='asis', echo=FALSE}
-cat('<div class="contact-info">')
-cat(info$location, '<br>')
-cat(sprintf('<a href="mailto:%s">%s</a><br>', info$emails[[1]], info$emails[[1]]))
-cat(sprintf('<a href="mailto:%s">%s</a><br>', info$emails[[2]], info$emails[[2]]))
-cat(sprintf('<a href="%s">LinkedIn</a> | ', info$links$LinkedIn))
-cat(sprintf('<a href="%s">GitHub</a> | ', info$links$GitHub))
-cat(sprintf('<a href="%s">ORCID</a>', info$links$ORCID))
-cat('</div>')
-```
-
-## Academic Orientation
-
-`r info$academic_orientation`
-
-## Research Interests
-
-`r paste(info$research_interests, collapse = "; ")`
-
-## Education
-
-```{r education_section, results='asis', echo=FALSE}
-render_entries(education, title_col = "degree")
-```
-
-## Research Experience
-
-```{r research_section, results='asis', echo=FALSE}
-render_entries(research, title_col = "role")
-```
-
-## Teaching Experience
-
-```{r teaching_section, results='asis', echo=FALSE}
-render_entries(teaching, title_col = "role")
-```
-
-## Collective Engagement and Community-Based Work
-
-```{r collective_section, results='asis', echo=FALSE}
-render_entries(collective, title_col = "role")
-```
-
-## Publications
-
-```{r publications_section, results='asis', echo=FALSE}
-cat('<ul class="pub-list">')
-for (i in seq_len(nrow(publications))) {
-  cat(sprintf('<li>%s</li>', publications$citation[i]))
+render_interests <- function(interests) {
+  cat(sprintf('<p class="body-text">%s</p>\n', escape_html(paste(interests, collapse = "; "))))
 }
-cat('</ul>')
-```
 
-## Methods and Technical Skills
+render_education_entry <- function(row) {
+  cat('<div class="entry">\n')
+  cat('<div class="entry-header">\n')
+  cat(sprintf('<div class="entry-title">%s</div>\n', escape_html(row$degree)))
+  cat(sprintf('<div class="entry-date">%s</div>\n', escape_html(row$dates)))
+  cat('</div>\n')
 
-**Qualitative and Mixed Methods:** `r skills$qualitative_and_mixed_methods`
+  cat(sprintf('<div class="entry-subtitle">%s</div>\n', escape_html(row$institution)))
 
-**Quantitative Methods and Data:** `r skills$quantitative_and_data`
+  details <- c(
+    row$location %||% "",
+    row$notes %||% ""
+  )
+  details <- details[details != ""]
+  if (length(details) > 0) {
+    cat(sprintf('<div class="entry-meta">%s</div>\n', escape_html(paste(details, collapse = " | "))))
+  }
 
-**Research Production:** `r skills$research_production`
+  if (!is.na(row$thesis) && row$thesis != "") {
+    cat(sprintf('<div class="entry-detail"><span class="label">Thesis:</span> %s</div>\n', escape_html(row$thesis)))
+  }
+  if (!is.na(row$supervisor) && row$supervisor != "") {
+    cat(sprintf('<div class="entry-detail"><span class="label">Supervisor:</span> %s</div>\n', escape_html(row$supervisor)))
+  }
+  if (!is.na(row$distinction) && row$distinction != "") {
+    cat(sprintf('<div class="entry-detail">%s</div>\n', escape_html(row$distinction)))
+  }
 
-**Digital and Organizational Tools:** `r skills$digital_and_organizational_tools`
-
-## Languages
-
-```{r languages_section, results='asis', echo=FALSE}
-cat('<ul class="languages-list">')
-for (i in seq_len(nrow(languages))) {
-  cat(sprintf('<li><strong>%s:</strong> %s</li>', languages$language[i], languages$level[i]))
+  cat('</div>\n')
 }
-cat('</ul>')
+
+render_bullet_list <- function(text) {
+  items <- str_split(text %||% "", "\\s*\\|\\s*")[[1]]
+  items <- items[items != ""]
+  if (length(items) > 0) {
+    cat('<ul class="cv-bullets">\n')
+    walk(items, ~cat(sprintf('<li>%s</li>\n', escape_html(.x))))
+    cat('</ul>\n')
+  }
+}
+
+render_experience_entry <- function(row) {
+  cat('<div class="entry">\n')
+  cat('<div class="entry-header">\n')
+  cat(sprintf('<div class="entry-title">%s</div>\n', escape_html(row$position)))
+  cat(sprintf('<div class="entry-date">%s</div>\n', escape_html(row$dates)))
+  cat('</div>\n')
+
+  org_line <- c(row$institution %||% "", row$location %||% "")
+  org_line <- org_line[org_line != ""]
+  cat(sprintf('<div class="entry-subtitle">%s</div>\n', escape_html(paste(org_line, collapse = ", "))))
+
+  if (!is.na(row$project) && row$project != "") {
+    cat(sprintf('<div class="entry-project">%s</div>\n', escape_html(row$project)))
+  }
+
+  meta_parts <- c()
+  if (!is.na(row$principal_investigator) && row$principal_investigator != "") {
+    meta_parts <- c(meta_parts, paste0("Principal Investigator: ", row$principal_investigator))
+  }
+  if (!is.na(row$course_or_unit) && row$course_or_unit != "") {
+    meta_parts <- c(meta_parts, row$course_or_unit)
+  }
+  if (!is.na(row$lecturer) && row$lecturer != "") {
+    meta_parts <- c(meta_parts, paste0("Lecturer: ", row$lecturer))
+  }
+
+  if (length(meta_parts) > 0) {
+    cat(sprintf('<div class="entry-meta">%s</div>\n', escape_html(paste(meta_parts, collapse = " | "))))
+  }
+
+  render_bullet_list(row$bullets %||% "")
+  cat('</div>\n')
+}
+
+render_publication_entry <- function(row) {
+  pub_text <- c(
+    row$authors %||% "",
+    row$title %||% "",
+    row$status %||% ""
+  )
+  pub_text <- pub_text[pub_text != ""]
+  cat(sprintf('<div class="publication">%s</div>\n', escape_html(paste(pub_text, collapse = " "))))
+}
+
+render_skill_group <- function(title, items) {
+  if (!is.null(items) && length(items) > 0) {
+    cat(sprintf(
+      '<div class="skill-group"><span class="skill-label">%s:</span> %s</div>\n',
+      escape_html(title),
+      escape_html(paste(items, collapse = "; "))
+    ))
+  }
+}
 ```
+
+<div class="cv-page">
+
+<div class="name-block">
+  <div class="cv-name">`r info$name`</div>
+  <div class="cv-contact">`r render_contact_line(info)`</div>
+</div>
+
+```{r profile, results='asis', echo=FALSE}
+render_section_title("Profile")
+render_paragraph(info$profile)
+```
+
+```{r research-interests, results='asis', echo=FALSE}
+render_section_title("Research Interests")
+render_interests(info$research_interests)
+```
+
+```{r education-section, results='asis', echo=FALSE}
+render_section_title("Education")
+education %>%
+  mutate(order = ifelse(is.na(order), 999, order)) %>%
+  arrange(order) %>%
+  split(seq_len(nrow(.))) %>%
+  walk(~render_education_entry(.x))
+```
+
+```{r research-section, results='asis', echo=FALSE}
+render_section_title("Research Experience")
+research %>%
+  mutate(order = ifelse(is.na(order), 999, order)) %>%
+  arrange(order) %>%
+  split(seq_len(nrow(.))) %>%
+  walk(~render_experience_entry(.x))
+```
+
+```{r teaching-section, results='asis', echo=FALSE}
+render_section_title("Teaching Experience")
+teaching %>%
+  mutate(order = ifelse(is.na(order), 999, order)) %>%
+  arrange(order) %>%
+  split(seq_len(nrow(.))) %>%
+  walk(~render_experience_entry(.x))
+```
+
+```{r community-section, results='asis', echo=FALSE}
+render_section_title("Collective and Community Engagement")
+community %>%
+  mutate(order = ifelse(is.na(order), 999, order)) %>%
+  arrange(order) %>%
+  split(seq_len(nrow(.))) %>%
+  walk(~render_experience_entry(.x))
+```
+
+```{r publication-section, results='asis', echo=FALSE}
+render_section_title("Publication")
+publications %>%
+  mutate(order = ifelse(is.na(order), 999, order)) %>%
+  arrange(order) %>%
+  split(seq_len(nrow(.))) %>%
+  walk(~render_publication_entry(.x))
+```
+
+```{r skills-section, results='asis', echo=FALSE}
+render_section_title("Methods and Technical Skills")
+render_skill_group("Qualitative and Mixed Methods", skills$qualitative_mixed_methods)
+render_skill_group("Data Analysis", skills$data_analysis)
+render_skill_group("Research and Digital Tools", skills$research_digital_tools)
+```
+
+```{r languages-section, results='asis', echo=FALSE}
+render_section_title("Languages")
+languages %>%
+  mutate(
+    line = ifelse(
+      details == "" | is.na(details),
+      paste0(language, " — ", level),
+      paste0(language, " — ", level, "; ", details)
+    )
+  ) %>%
+  pull(line) %>%
+  walk(~cat(sprintf('<div class="language-line">%s</div>\n', escape_html(.x))))
+```
+
+</div>
